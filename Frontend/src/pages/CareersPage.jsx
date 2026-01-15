@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 
 const API_BASE = "http://localhost:4000/api";
 
-export default function CareersPage() {
-  const { slug } = useParams();
+export default function CareersPage({ previewConfig, slugOverride }) {
+  const params = useParams();
+  const slug = slugOverride || params.slug;
 
   const [company, setCompany] = useState(null);
   const [jobs, setJobs] = useState([]);
@@ -35,12 +36,15 @@ export default function CareersPage() {
 
   if (!company) return <div className="p-6">Loading...</div>;
 
-  const { theme, sections } = company.config;
+  // ✅ THIS is the important part
+  const finalConfig = previewConfig || company.config;
+
+  const { theme, sections } = finalConfig;
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
 
-      {/* Header section*/}
+      {/* Header */}
       <div
         className="h-48 flex items-center justify-center"
         style={{ backgroundColor: theme.primaryColor }}
@@ -54,7 +58,7 @@ export default function CareersPage() {
         )}
       </div>
 
-      {/* Content Sections */}
+      {/* Sections */}
       <div className="max-w-4xl mx-auto p-6 space-y-8">
         {sections.filter(s => s.enabled).map(section => (
           <div key={section.id}>
