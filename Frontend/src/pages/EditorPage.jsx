@@ -20,9 +20,12 @@ export default function EditorPage() {
       });
   }, [slug]);
 
-  if (!company || !config) return <div className="p-6">Loading...</div>;
+  if (!company || !config) {
+    return <div className="p-6">Loading...</div>;
+  }
 
-  // Update theme
+  // ---------------- Theme ----------------
+
   function updateTheme(field, value) {
     setConfig({
       ...config,
@@ -30,7 +33,8 @@ export default function EditorPage() {
     });
   }
 
-  // Section operations
+  // ---------------- Sections ----------------
+
   function updateSection(id, field, value) {
     setConfig({
       ...config,
@@ -73,22 +77,47 @@ export default function EditorPage() {
     setConfig({ ...config, sections: newSections });
   }
 
+  // ---------------- Save ----------------
+
+  async function saveConfig() {
+  await fetch(`${API_BASE}/company/${slug}/config`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ config })
+  });
+
+  // Redirect to published careers page after save
+  navigate(`/${slug}/careers`);
+}
+
+
+  // ---------------- Render ----------------
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-
       <div className="max-w-5xl mx-auto space-y-8">
 
+        {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">
             Editing: {company.name}
           </h1>
 
-          <button
-            onClick={() => navigate(`/${slug}/preview`, { state: { config } })}
-            className="bg-black text-white px-4 py-2 rounded"
-          >
-            Preview
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={saveConfig}
+              className="bg-green-600 text-white px-4 py-2 rounded"
+            >
+              Save
+            </button>
+
+            <button
+              onClick={() => navigate(`/${slug}/preview`, { state: { config } })}
+              className="bg-black text-white px-4 py-2 rounded"
+            >
+              Preview
+            </button>
+          </div>
         </div>
 
         {/* Theme Controls */}

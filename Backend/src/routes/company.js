@@ -54,5 +54,41 @@ router.get("/:slug/jobs", async (req, res) => {
   res.json(data);
 });
 
+/* Edit Job */
+router.put("/:slug/config", async (req, res) => {
+  const { slug } = req.params;
+  const { config } = req.body;
+
+  if (!config) {
+    return res.status(400).json({ error: "Config required" });
+  }
+
+  const { data, error } = await supabase
+    .from("companies")
+    .update({ config })
+    .eq("slug", slug)
+    .select()
+    .single();
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  res.json(data);
+});
+
+// Get all companies (for homepage)
+router.get("/", async (req, res) => {
+  const { data, error } = await supabase
+    .from("companies")
+    .select("slug, name, config");
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  res.json(data);
+});
+
 
 export default router;
