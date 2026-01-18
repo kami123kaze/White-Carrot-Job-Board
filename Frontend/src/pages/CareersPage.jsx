@@ -1,9 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
+
 
 const API_BASE = "http://localhost:4000/api";
-
 export default function CareersPage({ previewConfig, slugOverride }) {
+  
+  const pageTitle = `${company.name} Careers`;
+  const pageDescription = `Explore open roles and learn more about life at ${company.name}.`;
+
   const params = useParams();
   const slug = slugOverride || params.slug;
 
@@ -42,7 +47,15 @@ export default function CareersPage({ previewConfig, slugOverride }) {
 
   return (
   <div className="min-h-screen bg-white text-gray-900">
+    <Helmet>
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDescription} />
 
+      {/* OpenGraph tags */}
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDescription} />
+      <meta property="og:type" content="website" />
+     </Helmet>  
     {/* Top Navigation */}
     <div className="bg-white border-b">
       <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
