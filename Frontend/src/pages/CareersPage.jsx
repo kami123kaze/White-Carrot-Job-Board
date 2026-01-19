@@ -6,12 +6,10 @@ import { Helmet } from "react-helmet-async";
 const API_BASE = "http://localhost:4000/api";
 export default function CareersPage({ previewConfig, slugOverride }) {
   
-  const pageTitle = `${company.name} Careers`;
-  const pageDescription = `Explore open roles and learn more about life at ${company.name}.`;
-
+  
   const params = useParams();
   const slug = slugOverride || params.slug;
-
+  
   const [company, setCompany] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [filters, setFilters] = useState({
@@ -19,7 +17,8 @@ export default function CareersPage({ previewConfig, slugOverride }) {
     type: "",
     search: ""
   });
-
+  
+  
   // Fetch company config
   useEffect(() => {
     fetch(`${API_BASE}/company/${slug}`)
@@ -40,6 +39,8 @@ export default function CareersPage({ previewConfig, slugOverride }) {
   }, [slug, filters]);
 
   if (!company) return <div className="p-6">Loading...</div>;
+  const pageTitle = `${company.name} Careers`;
+  const pageDescription = `Explore open roles and learn more about life at ${company.name}.`;
 
   const finalConfig = previewConfig || company.config;
 
@@ -79,19 +80,33 @@ export default function CareersPage({ previewConfig, slugOverride }) {
       </div>
     </div>
 
-    {/* Header */}
-    <div
-      className="h-48 flex items-center justify-center"
-      style={{ backgroundColor: theme.primaryColor }}
-    >
-      {theme.logoUrl ? (
-        <img src={theme.logoUrl} className="h-16" />
-      ) : (
-        <h1 className="text-white text-3xl font-bold">
-          {company.name} Careers
-        </h1>
-      )}
-    </div>
+{/* Header */}
+<div
+  className="h-56 flex items-center justify-center bg-cover bg-center"
+  style={{
+    backgroundImage: theme.bannerUrl
+      ? `url(${theme.bannerUrl})`
+      : "none",
+    backgroundColor: theme.bannerUrl
+      ? "transparent"
+      : theme.primaryColor
+  }}
+>
+  {/* Optional dark overlay for contrast */}
+  <div className="bg-black/40 w-full h-full flex items-center justify-center">
+    {theme.logoUrl ? (
+      <img
+        src={theme.logoUrl}
+        className="h-20 w-20 rounded-full object-cover bg-white p-1"
+      />
+    ) : (
+      <h1 className="text-white text-3xl font-bold">
+        {company.name} Careers
+      </h1>
+    )}
+  </div>
+</div>
+
 
     {/* Sections */}
     <div className="max-w-4xl mx-auto p-6 space-y-8">
