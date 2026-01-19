@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 
-const API_BASE = "http://localhost:4000/api";
+const API_BASE = "https://white-carrot-job-board.onrender.com/api";
 export default function CareersPage({ previewConfig, slugOverride }) {
   
   
